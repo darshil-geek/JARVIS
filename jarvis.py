@@ -21,4 +21,15 @@ def recordAudio():
     except:
         print("Didn't get ya !")
 
+
+def assistantResponse(text):
+    print(text)
+    myobj=gTTS(text=text,lang='en',slow=False)
+
+    myobj.save('assistant_response.mp3')
+    os.system('afplay assistant_response.mp3')
+
+text="This is a test by my master Darshil"
+
 recordAudio()
+assistantResponse(text)
