@@ -84,10 +84,15 @@ def greeting(text):
     for word in text.split():
         if word.lower() in GREETING_INPUTS:
             return random.choice(GREETING_RESPONSES) + "."
-            print("there")
-    return "majhama"
+            
 
 
+def getPerson(text):
+    wordList=text.split()
+
+    for i in range(0,len(wordList)):
+        if i+3 <=len(wordList) -1 and wordList[i].lower()=='who' and wordList[i+1].lower()=='is':
+            return wordList[i+2] + wordList[i+3]
 
 
 while(True):
@@ -102,6 +107,11 @@ while(True):
         if "date" in text:
             get_date=getDate()
             response=response+" "+get_date
+
+        if "who is" in text:
+            person=getPerson(text)
+            wiki=wikipedia.summary(person,sentences=2)
+            response=response + ' ' + wiki
     
     assistantResponse(response)
 
