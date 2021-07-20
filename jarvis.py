@@ -7,6 +7,8 @@ import random
 import warnings
 import pyaudio
 import calendar
+from selenium import webdriver
+
 warnings.filterwarnings('ignore')
 
 #PSS listening to commands
@@ -44,7 +46,7 @@ def assistantResponse(text):
 
 
 def wakewords(text):
-    WAKE_WORDS=["hi","hey pss","hi darshil","hai"]
+    WAKE_WORDS=["hi","hey pss","hi darshil","hai","high","hay"]
     text=str(text)
     text=text.lower()
 
@@ -57,7 +59,7 @@ def wakewords(text):
 
 
 
-
+#gets today's date
 def getDate():
     now=datetime.datetime.now()
     my_date=datetime.datetime.today()
@@ -86,7 +88,7 @@ def greeting(text):
             return random.choice(GREETING_RESPONSES) + "."
             
 
-
+#searches wikipedia for a particular person as asked by the user
 def getPerson(text):
     wordList=text.split()
 
@@ -94,14 +96,32 @@ def getPerson(text):
         if i+3 <=len(wordList) -1 and wordList[i].lower()=='who' and wordList[i+1].lower()=='is':
             return wordList[i+2] + wordList[i+3]
 
+#opens netflix
+def netflix(text):
+    usrname='' #enter ur netflix username
+    password='' #enter ur netflix password
+    driver = webdriver.Chrome(executable_path='./chromedriver')
+    driver.get("https://www.netflix.com")
+    signin = driver.find_element_by_xpath('//*[@id="appMountPoint"]/div/div/div/div/div/div[1]/div/a')
+    signin.click()
+
+    emailbar=driver.find_element_by_xpath('//*[@id="id_userLoginId"]')
+    emailbar.send_keys(usrname)
+    passbar=driver.find_element_by_xpath('//*[@id="id_password"]')
+    passbar.send_keys(password)
+    submit_btn=driver.find_element_by_xpath('//*[@id="appMountPoint"]/div/div[3]/div/div/div[1]/form/button')
+    submit_btn.click()
+    return "opened netflix"
+
+
 
 while(True):
 
-    text=recordAudio()
-    response=''
+        text=recordAudio()
+        response=''
 
-    if(wakewords(text)==True):
-        response=response+greeting(text)
+    #if(wakewords(text)==True):
+     #   response=response+greeting(text)
         
 
         if "date" in text:
@@ -113,5 +133,12 @@ while(True):
             wiki=wikipedia.summary(person,sentences=2)
             response=response + ' ' + wiki
     
-    assistantResponse(response)
+        if "Netflix" in text:
+            #response="Opening Netflix"
+            response=netflix(text)
+        assistantResponse(response)
 
+
+
+#xpath of 1st show - //*[@id="appMountPoint"]/div/div/div[1]/div[2]/div[1]/div/a[1]/div
+#xpath of 2nd show - //*[@id="appMountPoint"]/div/div/div[1]/div[2]/div[1]/div/a[2]/div
