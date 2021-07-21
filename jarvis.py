@@ -111,6 +111,11 @@ def netflix(text):
     passbar.send_keys(password)
     submit_btn=driver.find_element_by_xpath('//*[@id="appMountPoint"]/div/div[3]/div/div/div[1]/form/button')
     submit_btn.click()
+    
+    time.sleep(5)
+
+    user_after_singin=driver.find_element_by_link_text("") #add your user profile name
+    user_after_singin.click()
     return "opened netflix"
 
 
